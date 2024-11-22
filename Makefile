@@ -1,8 +1,16 @@
-cc=gcc
-
-cflags=-Wall -Wextra -Wpedantic
+cflags=
 
 ldflags=-nostdlib -no-pie
 
-all:
-	$(cc) $(cflags) $(ldflags) -o divtest main.s
+objs=main.o
+
+link: $(objs)
+	ld $(ldflags) -o divtest $(objs)
+
+%.o: %.asm
+	as $(cflags) -o $@ $<
+
+.PHONY: clean
+
+clean:
+	rm -f $(objs) divtest
