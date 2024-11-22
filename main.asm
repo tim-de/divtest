@@ -3,6 +3,8 @@
 .global _start
 
 stdout = 1
+SYS_write = 1
+SYS_exit = 60
 
 .text
 // Read the first command line argument and inform the user if its integer
@@ -16,7 +18,7 @@ _start:
     call strlen
     add %rax, %r12
     inc %r12
-    // r12 now contains the first user given
+    // r12 now points to the first user given
     // command line argument
     mov %r12, %rdi
     call atoi
@@ -47,7 +49,7 @@ not_enough_args:
 
 // call exit syscall with the return code stored in %rdi
 gtfo:
-    mov $60, %rax
+    mov $SYS_exit, %rax
     syscall
 
 // Take the null-terminated string pointed to by %rdi and return the length
@@ -90,6 +92,7 @@ atoi:
     mov $stdout, %rdi
     call print
     xor %rdi, %rdi
+    inc %rdi
     call gtfo
 
 // Take the null-terminated string pointed to by %rsi and print it to the
@@ -102,7 +105,7 @@ print:
     mov %rax, %rdx
     pop %rsi
     pop %rdi
-    mov $1, %rax
+    mov $SYS_write, %rax
     syscall
     ret
     
