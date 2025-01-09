@@ -22,10 +22,13 @@ _start:
     // command line argument
     mov %r12, %rdi
     call atoi
-    xor %rdx, %rdx
+    mov %rax, %rdi
+    mov $157073089683, %rcx
+    mul %rcx
+    sar $40, %rax
     mov $7, %rcx
-    div %rcx
-    test %rdx, %rdx
+    mul %rcx
+    cmp %rax, %rdi
     jz .divisible
     mov $no, %rsi
     mov $stdout, %rdi
